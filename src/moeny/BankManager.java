@@ -110,7 +110,9 @@ public class BankManager extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource()==btnNewButton) {//가입하기 버튼 눌렀을때 기능
 			try {
-				bankDAO.insert(textField.getText(), textField_1.getText(), Integer.parseInt(textField_2.getText()), textField_3.getText());
+				if (bankDAO.insert(textField.getText(), textField_1.getText(), Integer.parseInt(textField_2.getText()), textField_3.getText())==1) {
+					JOptionPane.showMessageDialog(null, "회원가입에 성공하였습니다.");
+				}
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}

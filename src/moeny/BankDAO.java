@@ -20,8 +20,9 @@ public class BankDAO {
 	      con = DriverManager.getConnection(url, user, password);
 	   }
 
-	   public void insert(String id, String name,int age, String tel)  {//회원가입을 받을 insert문
-		      try {
+	   public int insert(String id, String name,int age, String tel)  {//회원가입을 받을 insert문
+		   int res = 0;
+		   try {
 				seting();
 				BankDTO dto = new BankDTO();
 				dto.setId(id);
@@ -38,13 +39,14 @@ public class BankDAO {
 				ps.setString(4, dto.getTel());
 				
 				// 4. SQL문 실행 요청
-				int res = ps.executeUpdate();
+				res = ps.executeUpdate();
 				System.out.println("업데이트 확인" + res);
 				con.close();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		return res;
 		      
 		   }//insert문끝
 	
@@ -53,7 +55,7 @@ public class BankDAO {
 		int rn = 0;
 		try {
 			seting();
-			String sql = "update bankmember set tel = '"+tel+"' where id = "+id;
+			String sql = "update bankmember set tel = '"+tel+"' where id = '"+id+"'";
 			
 			PreparedStatement ps = con.prepareStatement(sql);
 			rn = ps.executeUpdate();
@@ -73,7 +75,7 @@ public class BankDAO {
 		
 		try {
 			seting();
-			String sql = "delete from bankmember where id ="+id;
+			String sql = "delete from bankmember where id ='"+id+"'";
 			
 			PreparedStatement ps = con.prepareStatement(sql);
 			
@@ -94,13 +96,13 @@ public class BankDAO {
 		try {
 			seting();
 			
-			BankDTO dto = null; 
+			BankDTO dto = new BankDTO();
 			
-			String sql = "select * from bankmember where id = "+id;
+			String sql = "select * from bankmember where id ='"+id+"'";
 			PreparedStatement ps = con.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				dto = new BankDTO();
+			
+			rs.next();
 				id = rs.getString(1);
 				String name = rs.getString(2);
 				int age = rs.getInt(3);
@@ -110,7 +112,7 @@ public class BankDAO {
 				dto.setName(name);
 				dto.setAge(age);
 				dto.setTel(tel);
-			}
+			
 			con.close();
 			return dto;
 		
